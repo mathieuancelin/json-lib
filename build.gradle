@@ -1,0 +1,91 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+    }
+}
+
+plugins {
+    id "com.jfrog.bintray" version "1.7"
+    id "maven"
+    id "maven-publish"
+    id "java"
+    id 'ch.netzwerg.release' version '1.2.5'
+}
+
+group = 'org.reactivecouchbase.json'
+
+jar {
+    baseName = 'json-lib'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    compile("com.fasterxml.jackson.core:jackson-core:2.9.4")
+    compile("com.fasterxml.jackson.core:jackson-annotations:2.9.4")
+    compile("com.fasterxml.jackson.core:jackson-databind:2.9.4")
+    compile("joda-time:joda-time:2.9.9")
+    compile('io.vavr:vavr:0.9.2')
+
+    testCompile("junit:junit:4.12")
+    testCompile("org.assertj:assertj-core:3.9.0")
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+javadoc.failOnError = false
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_PASSWORD')
+    publications = ['mavenPublication']
+    pkg {
+        name = 'json-lib'
+        repo = 'maven'
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/mathieuancelin/json-lib-javaslang.git'
+        publish = true
+        version {
+            name = "${project.version}"
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenPublication(MavenPublication) {
+            from components.java
+            groupId 'org.reactivecouchbase.json'
+            artifactId 'json-lib'
+            version "${project.version}"
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+}
+
+release {
+    dependsOn build
+    push = true
+    versionSuffix = '-SNAPSHOT' // '.DEV' or '' (empty) could be useful alternatives
+    tagPrefix = 'v' // 'r' or '' (empty) could be useful alternatives
+}
