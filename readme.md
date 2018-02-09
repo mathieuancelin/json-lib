@@ -6,7 +6,7 @@ Will be the standard Json library for the ReactiveCouchbase Java wrapper
 
 # Import lib
 
-using the JCenter repository
+using the JCenter repository 
 
 ```xml
 <dependency>
