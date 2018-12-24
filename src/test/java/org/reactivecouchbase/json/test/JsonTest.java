@@ -1,7 +1,7 @@
 package org.reactivecouchbase.json.test;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.reactivecouchbase.json.*;
 import org.reactivecouchbase.json.mapping.*;
 
@@ -79,8 +79,8 @@ public class JsonTest {
         JsValue value2 = Json.obj().with("value", new BigDecimal(12334535345456700.12345634534534578901));
         String str = Json.stringify(value);
         String str2 = Json.stringify(value2);
-        Assert.assertEquals("{\"value\":12334535345456700.12345634534534578901}", str);
-        Assert.assertEquals("{\"value\":12334535345456700}", str2);
+        Assertions.assertEquals("{\"value\":12334535345456700.12345634534534578901}", str);
+        Assertions.assertEquals("{\"value\":12334535345456700}", str2);
     }
 
     @Test
@@ -101,19 +101,19 @@ public class JsonTest {
         JsString helloWorld = string("Hello World!");
         JsString helloWorld2 = string("Hello World!");
 
-        Assert.assertEquals(nill, nill2);
-        Assert.assertEquals(undefined, undefined2);
-        Assert.assertEquals(boolTrue, boolTrue2);
-        Assert.assertEquals(undefined, undefined2);
-        Assert.assertEquals(number1, number12);
-        Assert.assertEquals(number21, number212);
-        Assert.assertEquals(helloWorld, helloWorld2);
+        Assertions.assertEquals(nill, nill2);
+        Assertions.assertEquals(undefined, undefined2);
+        Assertions.assertEquals(boolTrue, boolTrue2);
+        Assertions.assertEquals(undefined, undefined2);
+        Assertions.assertEquals(number1, number12);
+        Assertions.assertEquals(number21, number212);
+        Assertions.assertEquals(helloWorld, helloWorld2);
 
-        Assert.assertNotSame(nill, undefined);
-        Assert.assertNotSame(boolTrue, boolFalse);
-        Assert.assertNotSame(number1, number2);
-        Assert.assertNotSame(number2, number21);
-        Assert.assertNotSame(hello, helloWorld);
+        Assertions.assertNotSame(nill, undefined);
+        Assertions.assertNotSame(boolTrue, boolFalse);
+        Assertions.assertNotSame(number1, number2);
+        Assertions.assertNotSame(number2, number21);
+        Assertions.assertNotSame(hello, helloWorld);
     }
 
     @Test
@@ -129,11 +129,11 @@ public class JsonTest {
         String basicObject3AsString = "{\"key1\":\"value1\",\"key2\":\"value2\"}";
         JsValue basicObject3 = Json.parse(basicObject3AsString);
 
-        Assert.assertEquals(basicObject1, basicObject2);
-        Assert.assertEquals(basicObject1, basicObject3);
-        Assert.assertEquals(basicObject2, basicObject3);
+        Assertions.assertEquals(basicObject1, basicObject2);
+        Assertions.assertEquals(basicObject1, basicObject3);
+        Assertions.assertEquals(basicObject2, basicObject3);
 
-        Assert.assertTrue(Json.prettyPrint(basicObject1).contains("\n"));
+        Assertions.assertTrue(Json.prettyPrint(basicObject1).contains("\n"));
 
         JsObject userJson = Json.obj(
                 $("name", "John"),
@@ -163,30 +163,30 @@ public class JsonTest {
         System.out.println(userJson3);
 
         User user = new User("John", "Doe", 42);
-        Assert.assertNotSame(userJson, user);
-        Assert.assertEquals(userJson, Json.toJson(user));
-        Assert.assertNotEquals(userJson, oldUserJson);
-        Assert.assertTrue(userJson.deepEquals(userJson));
-        Assert.assertFalse(userJson.deepEquals(oldUserJson));
-        Assert.assertEquals(userJson, userJson2);
-        Assert.assertEquals(userJson2, Json.toJson(user));
-        Assert.assertEquals(userJson, userJson3);
-        Assert.assertEquals(userJson3, Json.toJson(user));
-        Assert.assertEquals(userJson2, userJson3);
-        Assert.assertEquals(userJson, userJson4);
-        Assert.assertEquals(userJson4, Json.toJson(user));
-        Assert.assertEquals(user, Json.fromJson(userJson, Json.reads(User.class)).get());
+        Assertions.assertNotSame(userJson, user);
+        Assertions.assertEquals(userJson, Json.toJson(user));
+        Assertions.assertNotEquals(userJson, oldUserJson);
+        Assertions.assertTrue(userJson.deepEquals(userJson));
+        Assertions.assertFalse(userJson.deepEquals(oldUserJson));
+        Assertions.assertEquals(userJson, userJson2);
+        Assertions.assertEquals(userJson2, Json.toJson(user));
+        Assertions.assertEquals(userJson, userJson3);
+        Assertions.assertEquals(userJson3, Json.toJson(user));
+        Assertions.assertEquals(userJson2, userJson3);
+        Assertions.assertEquals(userJson, userJson4);
+        Assertions.assertEquals(userJson4, Json.toJson(user));
+        Assertions.assertEquals(user, Json.fromJson(userJson, Json.reads(User.class)).get());
 
         for (String name : userJson.field("name").asOpt(String.class)) {
-            Assert.assertEquals("John", name);
+            Assertions.assertEquals("John", name);
         }
 
         for (String surname : userJson.field("surname").asOpt(String.class)) {
-            Assert.assertEquals("Doe", surname);
+            Assertions.assertEquals("Doe", surname);
         }
 
         for (Integer a : userJson.field("age").asOpt(Integer.class)) {
-            Assert.assertEquals(Integer.valueOf(42), a);
+            Assertions.assertEquals(Integer.valueOf(42), a);
         }
 
     }
@@ -194,8 +194,8 @@ public class JsonTest {
     @Test
     public void arrayTest() {
         String value = Json.stringify(Json.arr("val1", "val2", "val3").append(Json.arr("val4", "val5")).addElement(string("val6")));
-        Assert.assertEquals("[\"val1\",\"val2\",\"val3\",\"val4\",\"val5\",\"val6\"]", value);
-        Assert.assertEquals(Json.arr("val1", "val2", "val3").append(Json.arr("val4", "val5", "val6")).get(5), string("val6"));
+        Assertions.assertEquals("[\"val1\",\"val2\",\"val3\",\"val4\",\"val5\",\"val6\"]", value);
+        Assertions.assertEquals(Json.arr("val1", "val2", "val3").append(Json.arr("val4", "val5", "val6")).get(5), string("val6"));
     }
 
     @Test
@@ -234,32 +234,32 @@ public class JsonTest {
             }
         };
         JsResult<User> maybeUser = Json.fromJson(userJson, userReader);
-        Assert.assertFalse(maybeUser.isErrors());
-        Assert.assertTrue(maybeUser.isSuccess());
+        Assertions.assertFalse(maybeUser.isErrors());
+        Assertions.assertTrue(maybeUser.isSuccess());
         for (User user : maybeUser) {
-            Assert.assertEquals("John", user.name);
-            Assert.assertEquals("Doe", user.surname);
-            Assert.assertEquals(Integer.valueOf(42), user.age);
+            Assertions.assertEquals("John", user.name);
+            Assertions.assertEquals("Doe", user.surname);
+            Assertions.assertEquals(Integer.valueOf(42), user.age);
         }
         JsResult<User> maybeUser2 = Json.fromJson(userJson2, userReader);
         JsResult<User> maybeUser3 = Json.fromJson(userJson3, userReader);
         JsResult<User> maybeUser4 = Json.fromJson(userJson4, userReader);
 
-        Assert.assertTrue(maybeUser2.isErrors());
-        Assert.assertFalse(maybeUser2.isSuccess());
-        Assert.assertTrue(maybeUser2.hasErrors());
-        Assert.assertEquals(1, maybeUser2.countErrors());
+        Assertions.assertTrue(maybeUser2.isErrors());
+        Assertions.assertFalse(maybeUser2.isSuccess());
+        Assertions.assertTrue(maybeUser2.hasErrors());
+        Assertions.assertEquals(1, maybeUser2.countErrors());
 
 
-        Assert.assertTrue(maybeUser3.isErrors());
-        Assert.assertFalse(maybeUser3.isSuccess());
-        Assert.assertTrue(maybeUser3.hasErrors());
-        Assert.assertEquals(1, maybeUser3.countErrors());
+        Assertions.assertTrue(maybeUser3.isErrors());
+        Assertions.assertFalse(maybeUser3.isSuccess());
+        Assertions.assertTrue(maybeUser3.hasErrors());
+        Assertions.assertEquals(1, maybeUser3.countErrors());
 
-        Assert.assertTrue(maybeUser4.isErrors());
-        Assert.assertFalse(maybeUser4.isSuccess());
-        Assert.assertTrue(maybeUser4.hasErrors());
-        Assert.assertEquals(1, maybeUser4.countErrors());
+        Assertions.assertTrue(maybeUser4.isErrors());
+        Assertions.assertFalse(maybeUser4.isSuccess());
+        Assertions.assertTrue(maybeUser4.hasErrors());
+        Assertions.assertEquals(1, maybeUser4.countErrors());
 
         Writer<User> userWriter = user -> Json.obj(
                 $("name", user.name.toUpperCase()),
@@ -275,7 +275,7 @@ public class JsonTest {
 
         JsObject value = Json.toJson(new User("John", "Doe", 42), userWriter).as(JsObject.class);
 
-        Assert.assertEquals(userJsonUpper, value);
+        Assertions.assertEquals(userJsonUpper, value);
     }
 
     @Test
@@ -314,32 +314,32 @@ public class JsonTest {
             }
         };
         JsResult<User> maybeUser = Json.fromJson(userJson, userReader);
-        Assert.assertFalse(maybeUser.isErrors());
-        Assert.assertTrue(maybeUser.isSuccess());
+        Assertions.assertFalse(maybeUser.isErrors());
+        Assertions.assertTrue(maybeUser.isSuccess());
         for (User user : maybeUser) {
-            Assert.assertEquals("John", user.name);
-            Assert.assertEquals("Doe", user.surname);
-            Assert.assertEquals(Integer.valueOf(42), user.age);
+            Assertions.assertEquals("John", user.name);
+            Assertions.assertEquals("Doe", user.surname);
+            Assertions.assertEquals(Integer.valueOf(42), user.age);
         }
         JsResult<User> maybeUser2 = Json.fromJson(userJson2, userReader);
         JsResult<User> maybeUser3 = Json.fromJson(userJson3, userReader);
         JsResult<User> maybeUser4 = Json.fromJson(userJson4, userReader);
 
-        Assert.assertTrue(maybeUser2.isErrors());
-        Assert.assertFalse(maybeUser2.isSuccess());
-        Assert.assertTrue(maybeUser2.hasErrors());
-        Assert.assertEquals(1, maybeUser2.countErrors());
+        Assertions.assertTrue(maybeUser2.isErrors());
+        Assertions.assertFalse(maybeUser2.isSuccess());
+        Assertions.assertTrue(maybeUser2.hasErrors());
+        Assertions.assertEquals(1, maybeUser2.countErrors());
 
 
-        Assert.assertTrue(maybeUser3.isErrors());
-        Assert.assertFalse(maybeUser3.isSuccess());
-        Assert.assertTrue(maybeUser3.hasErrors());
-        Assert.assertEquals(1, maybeUser3.countErrors());
+        Assertions.assertTrue(maybeUser3.isErrors());
+        Assertions.assertFalse(maybeUser3.isSuccess());
+        Assertions.assertTrue(maybeUser3.hasErrors());
+        Assertions.assertEquals(1, maybeUser3.countErrors());
 
-        Assert.assertTrue(maybeUser4.isErrors());
-        Assert.assertFalse(maybeUser4.isSuccess());
-        Assert.assertTrue(maybeUser4.hasErrors());
-        Assert.assertEquals(1, maybeUser4.countErrors());
+        Assertions.assertTrue(maybeUser4.isErrors());
+        Assertions.assertFalse(maybeUser4.isSuccess());
+        Assertions.assertTrue(maybeUser4.hasErrors());
+        Assertions.assertEquals(1, maybeUser4.countErrors());
     }
 
     @Test
@@ -409,8 +409,8 @@ public class JsonTest {
         Json.parse(Json.stringify(expected));
         Json.parse(Json.prettyPrint(expected));
 
-        Assert.assertEquals(expected, obj1.merge(obj2).deepMerge(obj4));
-        Assert.assertEquals(expected, obj1.deepMerge(obj2).deepMerge(obj5.deepMerge(obj6)));
+        Assertions.assertEquals(expected, obj1.merge(obj2).deepMerge(obj4));
+        Assertions.assertEquals(expected, obj1.deepMerge(obj2).deepMerge(obj5.deepMerge(obj6)));
     }
 
     @Test
@@ -428,20 +428,20 @@ public class JsonTest {
                 )
         );
 
-        Assert.assertEquals("valueSearched", deepObject.field("key5").field("key3").field("key1").as(String.class));
-        Assert.assertEquals("valueSearched", deepObject.field("key5").field("key3").field("key1").as(String.class));
+        Assertions.assertEquals("valueSearched", deepObject.field("key5").field("key3").field("key1").as(String.class));
+        Assertions.assertEquals("valueSearched", deepObject.field("key5").field("key3").field("key1").as(String.class));
 
-        Assert.assertTrue(deepObject.fields("key1").contains(string("value1")));
-        Assert.assertTrue(deepObject.fields("key1").contains(string("value1")));
-        Assert.assertTrue(deepObject.fields("key1").contains(string("valueSearched")));
-        Assert.assertTrue(deepObject.fields("key2").contains(string("value2")));
-        Assert.assertTrue(deepObject.fields("key2").contains(string("value22")));
+        Assertions.assertTrue(deepObject.fields("key1").contains(string("value1")));
+        Assertions.assertTrue(deepObject.fields("key1").contains(string("value1")));
+        Assertions.assertTrue(deepObject.fields("key1").contains(string("valueSearched")));
+        Assertions.assertTrue(deepObject.fields("key2").contains(string("value2")));
+        Assertions.assertTrue(deepObject.fields("key2").contains(string("value22")));
 
-        Assert.assertTrue(deepObject.fields("key1").contains(string("value1")));
-        Assert.assertTrue(deepObject.fields("key1").contains(string("value1")));
-        Assert.assertTrue(deepObject.fields("key1").contains(string("valueSearched")));
-        Assert.assertTrue(deepObject.fields("key2").contains(string("value2")));
-        Assert.assertTrue(deepObject.fields("key2").contains(string("value22")));
+        Assertions.assertTrue(deepObject.fields("key1").contains(string("value1")));
+        Assertions.assertTrue(deepObject.fields("key1").contains(string("value1")));
+        Assertions.assertTrue(deepObject.fields("key1").contains(string("valueSearched")));
+        Assertions.assertTrue(deepObject.fields("key2").contains(string("value2")));
+        Assertions.assertTrue(deepObject.fields("key2").contains(string("value22")));
     }
 
     public static class Foo {
@@ -491,12 +491,12 @@ public class JsonTest {
         boolean passes = false;
         for (Foo foo : fooReader.read(deepObject)) {
             passes = true;
-            Assert.assertEquals("value1", foo.value1);
-            Assert.assertEquals(new Double(2.3), foo.value2);
-            Assert.assertEquals("value22", foo.value3);
-            Assert.assertEquals("valueSearched", foo.value4);
+            Assertions.assertEquals("value1", foo.value1);
+            Assertions.assertEquals(new Double(2.3), foo.value2);
+            Assertions.assertEquals("value22", foo.value3);
+            Assertions.assertEquals("valueSearched", foo.value4);
         }
-        Assert.assertTrue(passes);
+        Assertions.assertTrue(passes);
     }
 
     @Test
@@ -529,9 +529,9 @@ public class JsonTest {
                 $("nae", "Stuff"),
                 $("vat", 19.6)
         );
-        Assert.assertEquals(expected, obj);
-        Assert.assertNotEquals(expected, wrongobj1);
-        Assert.assertNotEquals(expected, wrongobj2);
+        Assertions.assertEquals(expected, obj);
+        Assertions.assertNotEquals(expected, wrongobj1);
+        Assertions.assertNotEquals(expected, wrongobj2);
     }
 
     @Test
@@ -563,8 +563,8 @@ public class JsonTest {
 
         System.out.println(Json.parse(expectedPerson));
 
-        Assert.assertTrue(Json.parse(expectedPerson).validate(Person.FORMAT).isSuccess());
-        Assert.assertTrue(Json.parse(badPerson).validate(Person.FORMAT).isErrors());
+        Assertions.assertTrue(Json.parse(expectedPerson).validate(Person.FORMAT).isSuccess());
+        Assertions.assertTrue(Json.parse(badPerson).validate(Person.FORMAT).isErrors());
     }
 
 
@@ -574,7 +574,7 @@ public class JsonTest {
         JsResult<Person> error = JsResult.error(throwable);
 
         String fold = error.fold(err -> "ERR", person -> "OK");
-        Assert.assertEquals("ERR", fold);
+        Assertions.assertEquals("ERR", fold);
     }
 
     @Test
@@ -583,7 +583,7 @@ public class JsonTest {
         JsResult<Person> error = JsResult.success(person);
 
         String fold = error.fold(err -> "ERR", p -> "OK");
-        Assert.assertEquals("OK", fold);
+        Assertions.assertEquals("OK", fold);
     }
 
 
