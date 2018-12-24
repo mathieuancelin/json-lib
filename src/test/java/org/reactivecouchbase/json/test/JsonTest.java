@@ -1,5 +1,6 @@
 package org.reactivecouchbase.json.test;
 
+import io.vavr.control.Option;
 import org.junit.Assert;
 import org.junit.Test;
 import org.reactivecouchbase.json.*;
@@ -586,6 +587,30 @@ public class JsonTest {
         Assert.assertEquals("OK", fold);
     }
 
+    @Test
+    public void optionSyntaxTest() {
+        JsValue personJsValue = Json.obj(
+                $("age", Option.some(42)),
+                $("name", Option.some("John")),
+                $("surname", "Doe"),
+                $("address", Option.some(Json.obj(
+                        $("number", Option.some("221b")),
+                        $("street", "Baker Street"),
+                        $("city", "London")
+                ))),
+                $("workingAdress", Option.none())
+        );
+
+        Assert.assertEquals(Integer.valueOf(42), personJsValue.integer("age"));
+        Assert.assertEquals("John", personJsValue.string("name"));
+        Assert.assertEquals("Doe", personJsValue.string("surname"));
+        Assert.assertEquals("221b", personJsValue.object("address").string("number"));
+        Assert.assertEquals("Baker Street", personJsValue.object("address").string("street"));
+        Assert.assertEquals("London", personJsValue.object("address").string("city"));
+
+        Assert.assertFalse(personJsValue.exists("workingAdress"));
+        Assert.assertFalse(personJsValue.fieldAsOpt("workingAdress").isDefined());
+    }
 
     public static class Address {
         public final String number;
