@@ -3,6 +3,7 @@ package org.reactivecouchbase.json;
 import io.vavr.Tuple;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
+import io.vavr.control.Option;
 import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
@@ -135,6 +136,12 @@ public class Syntax {
 
     public static JsPair $(String name, Boolean value) {
         return new JsPair(name, value);
+    }
+
+    public static JsPair $(String name, Option<?> valueOpt) {
+        return valueOpt
+                .map(opt -> $$$(name, valueOpt.get()))
+                .getOrElse(() -> null);
     }
 
     public static JsString string(String value) {
