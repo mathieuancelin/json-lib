@@ -254,7 +254,7 @@ public abstract class JsValue implements Serializable {
         return Json.prettyPrint(this);
     }
 
-    public JsonNode asJsonNode(JsValue val) {
+    public JsonNode asJsonNode() {
         return Jackson.toJson(this);
     }
 }
