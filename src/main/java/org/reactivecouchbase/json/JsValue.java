@@ -11,6 +11,8 @@ import java.math.BigDecimal;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 public abstract class JsValue implements Serializable {
     public <T extends JsValue> Iterable<T> extractAs(Class<T> clazz) {
         if (is(clazz)) {
@@ -250,5 +252,9 @@ public abstract class JsValue implements Serializable {
 
     public String pretty() {
         return Json.prettyPrint(this);
+    }
+
+    public JsonNode asJsonNode(JsValue val) {
+        return Jackson.toJson(this);
     }
 }
