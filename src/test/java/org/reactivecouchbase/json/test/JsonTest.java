@@ -601,15 +601,15 @@ public class JsonTest {
                 $("workingAdress", Option.none())
         );
 
-        Assert.assertEquals(Integer.valueOf(42), personJsValue.integer("age"));
-        Assert.assertEquals("John", personJsValue.string("name"));
-        Assert.assertEquals("Doe", personJsValue.string("surname"));
-        Assert.assertEquals("221b", personJsValue.object("address").string("number"));
-        Assert.assertEquals("Baker Street", personJsValue.object("address").string("street"));
-        Assert.assertEquals("London", personJsValue.object("address").string("city"));
+        Assertions.assertEquals(Integer.valueOf(42), personJsValue.integer("age"));
+        Assertions.assertEquals("John", personJsValue.string("name"));
+        Assertions.assertEquals("Doe", personJsValue.string("surname"));
+        Assertions.assertEquals("221b", personJsValue.object("address").string("number"));
+        Assertions.assertEquals("Baker Street", personJsValue.object("address").string("street"));
+        Assertions.assertEquals("London", personJsValue.object("address").string("city"));
 
-        Assert.assertFalse(personJsValue.exists("workingAdress"));
-        Assert.assertFalse(personJsValue.fieldAsOpt("workingAdress").isDefined());
+        Assertions.assertFalse(personJsValue.exists("workingAdress"));
+        Assertions.assertFalse(personJsValue.fieldAsOpt("workingAdress").isDefined());
     }
 
     public static class Address {

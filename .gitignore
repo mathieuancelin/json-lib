@@ -8,3 +8,8 @@
 /classes
 .gradletasknamecache
 /out
+.project
+.settings
+.classpath
+/bin
+.vscode
