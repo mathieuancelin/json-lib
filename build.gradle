@@ -23,6 +23,13 @@ jar {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+test {
+    useJUnitPlatform()
+    testLogging {
+        exceptionFormat = 'full'
+    }
+}
+
 repositories {
     mavenCentral()
     mavenCentral()
@@ -30,14 +37,14 @@ repositories {
 }
 
 dependencies {
-    compile("com.fasterxml.jackson.core:jackson-core:2.9.4")
-    compile("com.fasterxml.jackson.core:jackson-annotations:2.9.4")
-    compile("com.fasterxml.jackson.core:jackson-databind:2.9.4")
-    compile("joda-time:joda-time:2.9.9")
+    compile("com.fasterxml.jackson.core:jackson-core:2.9.8")
+    compile("com.fasterxml.jackson.core:jackson-annotations:2.9.8")
+    compile("com.fasterxml.jackson.core:jackson-databind:2.9.8")
+    compile("joda-time:joda-time:2.10.1")
     compile('io.vavr:vavr:0.9.2')
 
-    testCompile("junit:junit:4.12")
-    testCompile("org.assertj:assertj-core:3.9.0")
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.3.2")
+    testCompile("org.junit.jupiter:junit-jupiter-engine:5.3.2")
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
