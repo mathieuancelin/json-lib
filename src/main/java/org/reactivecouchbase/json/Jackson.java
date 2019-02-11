@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.node.BigIntegerNode;
 import com.fasterxml.jackson.databind.node.DecimalNode;
 import com.fasterxml.jackson.databind.ser.Serializers;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.vavr.Tuple2;
 
 import java.io.IOException;
@@ -17,6 +19,7 @@ import java.math.BigInteger;
 
 public class Jackson {
 
+    /*
     private static ObjectMapper mapper = null;
     private static JsonFactory jsonFactory = null;
 
@@ -36,10 +39,53 @@ public class Jackson {
         jsonFactory = new JsonFactory(mapper);
 
     }
+    */
+
+    private static final ObjectMapper _defaultObjectMapper = newDefaultMapper(Jackson.class.getClassLoader());
+    private static final JsonFactory _defaultJsonFactory = new JsonFactory(_defaultObjectMapper);
+    private static volatile ObjectMapper _objectMapper = null;
+    private static volatile JsonFactory _jsonFactory = null;
+
+    public static ObjectMapper newDefaultMapper(ClassLoader classLoader) {
+        SimpleModule jsonLibModule = new SimpleModule("json-lib", Version.unknownVersion()) {
+            @Override
+            public void setupModule(SetupContext setupContext) {
+                setupContext.addDeserializers(new JsDeserializers(classLoader));
+                setupContext.addSerializers(new JsSerializers());
+            }
+        };
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new Jdk8Module());
+        mapper.registerModule(new JavaTimeModule());
+        mapper.registerModule(jsonLibModule);
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        return mapper;
+    }
+
+    public static ObjectMapper mapper() {
+        if (_objectMapper == null) {
+            return _defaultObjectMapper;
+        } else {
+            return _objectMapper;
+        }
+    }
+
+    public static JsonFactory factory() {
+        if (_jsonFactory == null) {
+            return _defaultJsonFactory;
+        } else {
+            return _jsonFactory;
+        }
+    }
+
+    public static void setObjectMapper(ObjectMapper mapper) {
+        _objectMapper = mapper;
+        _jsonFactory = new JsonFactory(_objectMapper);
+    }
 
     public static JsonGenerator stringJsonGenerator(StringWriter out) {
         try {
-            return jsonFactory.createGenerator(out);
+            return factory().createGenerator(out);
         } catch (Exception e) {
             throw Throwables.propagate(e);
         }
@@ -47,7 +93,7 @@ public class Jackson {
 
     public static JsonParser jsonParser(String str) {
         try {
-            return jsonFactory.createParser(str);
+            return factory().createParser(str);
         } catch (Exception e) {
             throw Throwables.propagate(e);
         }
@@ -55,7 +101,7 @@ public class Jackson {
 
     public static JsValue parseJsValue(String in) {
         try {
-            return mapper.readValue(in, JsValue.class);
+            return mapper().readValue(in, JsValue.class);
         } catch (Exception e) {
             throw Throwables.propagate(e);
         }
@@ -65,7 +111,7 @@ public class Jackson {
         try {
             StringWriter sw = new java.io.StringWriter();
             JsonGenerator gen = stringJsonGenerator(sw);
-            mapper.writeValue(gen, in);
+            mapper().writeValue(gen, in);
             sw.flush();
             return sw.getBuffer().toString();
         } catch (Exception e) {
@@ -77,7 +123,7 @@ public class Jackson {
         try {
             StringWriter sw = new java.io.StringWriter();
             JsonGenerator gen = stringJsonGenerator(sw).setPrettyPrinter(new com.fasterxml.jackson.core.util.DefaultPrettyPrinter());
-            mapper.writerWithDefaultPrettyPrinter().writeValue(gen, in);
+            mapper().writerWithDefaultPrettyPrinter().writeValue(gen, in);
             sw.flush();
             return sw.getBuffer().toString();
         } catch (Exception e) {
@@ -87,7 +133,7 @@ public class Jackson {
 
     public static JsonNode toJson(final Object data) {
         try {
-            return mapper.valueToTree(data);
+            return mapper().valueToTree(data);
         } catch(Exception e) {
             throw new RuntimeException(e);
         }
@@ -95,7 +141,7 @@ public class Jackson {
 
     public static JsValue jsonNodeToJsValue(JsonNode node) {
         try {
-            return mapper.treeToValue(node, JsValue.class);
+            return mapper().treeToValue(node, JsValue.class);
         } catch(Exception e) {
             throw new RuntimeException(e);
         }
@@ -103,7 +149,7 @@ public class Jackson {
 
     public static JsonNode jsValueToJsonNode(JsValue val) {
         try {
-            return mapper.valueToTree(val);
+            return mapper().valueToTree(val);
         } catch(Exception e) {
             throw new RuntimeException(e);
         }
@@ -111,7 +157,7 @@ public class Jackson {
 
     public static <A> A fromJson(JsonNode json, Class<A> clazz) {
         try {
-            return mapper.treeToValue(json, clazz);
+            return mapper().treeToValue(json, clazz);
         } catch(Exception e) {
             throw new RuntimeException(e);
         }

@@ -22,7 +22,7 @@ jar {
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-version = "1.0.3"
+version = "1.0.4"
 
 test {
     useJUnitPlatform()
@@ -41,6 +41,8 @@ dependencies {
     compile("com.fasterxml.jackson.core:jackson-core:2.9.8")
     compile("com.fasterxml.jackson.core:jackson-annotations:2.9.8")
     compile("com.fasterxml.jackson.core:jackson-databind:2.9.8")
+    compile("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.9.8")
+    compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.8")
     compile("joda-time:joda-time:2.10.1")
     compile('io.vavr:vavr:0.10.0')
 
