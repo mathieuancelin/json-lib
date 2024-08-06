@@ -29,7 +29,7 @@ jobs:
         run: |
           ./gradlew build test publish
           git commit -am 'Release version ${{ inputs.version }}'
-          git tag -am 'Release version ${{ inputs.version }}'
+          git tag -a '${{ inputs.version }}' -m 'Release version ${{ inputs.version }}'
           echo 'dev' > version.txt
           git commit -am 'Back to dev version'
           git push origin --tags
