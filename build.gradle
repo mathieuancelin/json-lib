@@ -79,6 +79,14 @@ publishing {
             name = 'local-repo'
             url = "file://${buildDir}/repo"
         }
+        maven {
+            name = 'github-packages'
+            url = "https://maven.pkg.github.com/mathieuancelin/json-lib"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
     }
 }
 
