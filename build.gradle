@@ -22,7 +22,7 @@ jar {
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-version = "1.0.4"
+// version = "1.0.4"
 
 test {
     useJUnitPlatform()
@@ -32,7 +32,6 @@ test {
 }
 
 repositories {
-    mavenCentral()
     mavenCentral()
     jcenter()
 }
@@ -64,22 +63,6 @@ artifacts {
     archives javadocJar
 }
 
-bintray {
-    user = System.getenv('BINTRAY_USER')
-    key = System.getenv('BINTRAY_PASSWORD')
-    publications = ['mavenPublication']
-    pkg {
-        name = 'json-lib'
-        repo = 'maven'
-        licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/mathieuancelin/json-lib.git'
-        publish = true
-        version {
-            name = "${project.version}"
-        }
-    }
-}
-
 publishing {
     publications {
         mavenPublication(MavenPublication) {
@@ -89,6 +72,12 @@ publishing {
             version "${project.version}"
             artifact sourcesJar
             artifact javadocJar
+        }
+    }
+    repositories {
+        maven {
+            name = 'local-repo'
+            url = "file://${buildDir}/repo"
         }
     }
 }

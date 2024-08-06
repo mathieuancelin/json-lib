@@ -1,0 +1,55 @@
+name: release-json-lib
+
+on: 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version number"
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup jdk11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - uses: coursier/cache-action@v5
+      - name: change version
+        run: |
+          echo '${{ inputs.version }}' > version.txt
+          git config --global user.email "release-bot-github-actions@users.noreply.github.com"
+          git config --global user.name "release-bot-github-actions"
+          git config --global --list
+      - name: build-libs
+        id: build-libs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ./gradlew build test publish
+          git commit -am 'Release version ${{ inputs.version }}'
+          git tag -am 'Release version ${{ inputs.version }}'
+          echo 'dev' > version.txt
+          git commit -am 'Back to dev version'
+          git push origin --tags
+          git push origin master
+          git push --all origin
+      - name: Release binary and SHA-256 checksum to GitHub
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ inputs.version }}
+          body: 'Release version ${{ inputs.version }}'
+          files: |
+            ./build/repo/org/reactivecouchbase/json/json-lib/json-lib-${{ inputs.version }}.jar
+            ./build/repo/org/reactivecouchbase/json/json-lib/json-lib-${{ inputs.version }}.jar.md5
+            ./build/repo/org/reactivecouchbase/json/json-lib/json-lib-${{ inputs.version }}.jar.sha1
+            ./build/repo/org/reactivecouchbase/json/json-lib/json-lib-${{ inputs.version }}.pom
+            ./build/repo/org/reactivecouchbase/json/json-lib/json-lib-${{ inputs.version }}.pom.md5
+            ./build/repo/org/reactivecouchbase/json/json-lib/json-lib-${{ inputs.version }}.pom.sha1
+            ./build/repo/org/reactivecouchbase/json/json-lib/json-lib-${{ inputs.version }}-javadoc.jar
+            ./build/repo/org/reactivecouchbase/json/json-lib/json-lib-${{ inputs.version }}-javadoc.jar.md5
+            ./build/repo/org/reactivecouchbase/json/json-lib/json-lib-${{ inputs.version }}-javadoc.jar.sha1
+            ./build/repo/org/reactivecouchbase/json/json-lib/json-lib-${{ inputs.version }}-sources.jar
+            ./build/repo/org/reactivecouchbase/json/json-lib/json-lib-${{ inputs.version }}-sources.jar.md5
+            ./build/repo/org/reactivecouchbase/json/json-lib/json-lib-${{ inputs.version }}-sources.jar.sha1
