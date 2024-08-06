@@ -41,15 +41,15 @@ jobs:
           tag_name: ${{ inputs.version }}
           body: 'Release version ${{ inputs.version }}'
           files: |
-            ./build/repo/org/reactivecouchbase/json/json-lib/json-lib-${{ inputs.version }}.jar
-            ./build/repo/org/reactivecouchbase/json/json-lib/json-lib-${{ inputs.version }}.jar.md5
-            ./build/repo/org/reactivecouchbase/json/json-lib/json-lib-${{ inputs.version }}.jar.sha1
-            ./build/repo/org/reactivecouchbase/json/json-lib/json-lib-${{ inputs.version }}.pom
-            ./build/repo/org/reactivecouchbase/json/json-lib/json-lib-${{ inputs.version }}.pom.md5
-            ./build/repo/org/reactivecouchbase/json/json-lib/json-lib-${{ inputs.version }}.pom.sha1
-            ./build/repo/org/reactivecouchbase/json/json-lib/json-lib-${{ inputs.version }}-javadoc.jar
-            ./build/repo/org/reactivecouchbase/json/json-lib/json-lib-${{ inputs.version }}-javadoc.jar.md5
-            ./build/repo/org/reactivecouchbase/json/json-lib/json-lib-${{ inputs.version }}-javadoc.jar.sha1
-            ./build/repo/org/reactivecouchbase/json/json-lib/json-lib-${{ inputs.version }}-sources.jar
-            ./build/repo/org/reactivecouchbase/json/json-lib/json-lib-${{ inputs.version }}-sources.jar.md5
-            ./build/repo/org/reactivecouchbase/json/json-lib/json-lib-${{ inputs.version }}-sources.jar.sha1
+            ./build/repo/org/reactivecouchbase/json/json-lib/${{ inputs.version }}/json-lib-${{ inputs.version }}.jar
+            ./build/repo/org/reactivecouchbase/json/json-lib/${{ inputs.version }}/json-lib-${{ inputs.version }}.jar.md5
+            ./build/repo/org/reactivecouchbase/json/json-lib/${{ inputs.version }}/json-lib-${{ inputs.version }}.jar.sha1
+            ./build/repo/org/reactivecouchbase/json/json-lib/${{ inputs.version }}/json-lib-${{ inputs.version }}.pom
+            ./build/repo/org/reactivecouchbase/json/json-lib/${{ inputs.version }}/json-lib-${{ inputs.version }}.pom.md5
+            ./build/repo/org/reactivecouchbase/json/json-lib/${{ inputs.version }}/json-lib-${{ inputs.version }}.pom.sha1
+            ./build/repo/org/reactivecouchbase/json/json-lib/${{ inputs.version }}/json-lib-${{ inputs.version }}-javadoc.jar
+            ./build/repo/org/reactivecouchbase/json/json-lib/${{ inputs.version }}/json-lib-${{ inputs.version }}-javadoc.jar.md5
+            ./build/repo/org/reactivecouchbase/json/json-lib/${{ inputs.version }}/json-lib-${{ inputs.version }}-javadoc.jar.sha1
+            ./build/repo/org/reactivecouchbase/json/json-lib/${{ inputs.version }}/json-lib-${{ inputs.version }}-sources.jar
+            ./build/repo/org/reactivecouchbase/json/json-lib/${{ inputs.version }}/json-lib-${{ inputs.version }}-sources.jar.md5
+            ./build/repo/org/reactivecouchbase/json/json-lib/${{ inputs.version }}/json-lib-${{ inputs.version }}-sources.jar.sha1
