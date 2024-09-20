@@ -26,8 +26,13 @@ jobs:
         id: build-libs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USER }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.PGP_SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.PGP_SIGNING_KEY_ID }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.PGP_SIGNING_KEY_PASSWORD }}
         run: |
-          ./gradlew build test publish
+          ./gradlew build test publish publishAndReleaseToMavenCentral
           git commit -am 'Release version ${{ inputs.version }}'
           git tag -a '${{ inputs.version }}' -m 'Release version ${{ inputs.version }}'
           echo 'dev' > version.txt

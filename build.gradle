@@ -1,3 +1,5 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 buildscript {
     repositories {
         mavenLocal()
@@ -12,6 +14,7 @@ plugins {
     id "maven-publish"
     id "java"
     id 'ch.netzwerg.release' version '1.2.5'
+    id "com.vanniktech.maven.publish" version "0.29.0"
 }
 
 group = 'org.reactivecouchbase.json'
@@ -61,6 +64,45 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 artifacts {
     archives sourcesJar
     archives javadocJar
+}
+
+mavenPublishing {
+  publishToMavenCentral(SonatypeHost.DEFAULT)
+  // or when publishing to https://s01.oss.sonatype.org
+  // publishToMavenCentral(SonatypeHost.S01)
+  // or when publishing to https://central.sonatype.com/
+  // publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+
+  signAllPublications()
+
+  coordinates("org.reactivecouchbase.json", "json-lib", "${project.version}")
+
+  pom {
+    name = "JSON lib"
+    description = "A JSON library highly inspired and copied from @mandubian (Pascal Voitot) Json lib for Play 2 Scala"
+    inceptionYear = "2018"
+    url = "https://github.com/mathieuancelin/json-lib/"
+    licenses {
+      license {
+        name = "The Apache License, Version 2.0"
+        url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        distribution = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    }
+    developers {
+      developer {
+        id = "mathieuancelin"
+        name = "Mathieu ANCELIN"
+        url = "https://github.com/mathieuancelin/"
+      }
+    }
+    scm {
+      url = "https://github.com/mathieuancelin/json-lib/"
+      connection = "scm:git:git://github.com/mathieuancelin/json-lib.git"
+      developerConnection = "scm:git:ssh://git@github.com/mathieuancelin/json-lib.git"
+    }
+  }
+
 }
 
 publishing {
